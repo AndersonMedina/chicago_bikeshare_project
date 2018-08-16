@@ -46,7 +46,8 @@ input("Press Enter to continue...")
 # TASK 2
 # TODO: Print the `gender` of the first 20 rows
 print("\nTASK 2: Printing the genders of the first 20 samples")
-print([data_list[i][6] for i in range(1, 21)])
+for i, line in enumerate(data_list[:20], start=1):
+    print("Line : {}\tGender: {}".format(i, line[-2]))
 
 # Cool! We can get the rows(samples) iterating with a for and the columns(features) by index.
 # But it's still hard to get a column in a list. Example: List with all genders
@@ -55,11 +56,16 @@ input("Press Enter to continue...")
 # TASK 3
 # TODO: Create a function to add the columns(features) of a list in another list in the same order
 def column_to_list(data, index):
+    """
+    The function uses columns from one list to create another list in the same order
+    Args:
+    data: List with data to be extracted
+    index: Indicates which column to extract
+    """
     column_list = []
     # Tip: You can use a for to iterate over the samples, get the feature by index and append into a list
     for line in range(len(data)):
         column_list.append(data[line][index])
-
     return column_list
 
 # Let's check with the genders if it's working (only the first 20)
@@ -100,9 +106,9 @@ input("Press Enter to continue...")
 # Should return a list with [count_male, counf_female] (e.g., [10, 15] means 10 Males, 15 Females)
 def count_gender(data_list):
     """
-    Args
-    Param1: a list/array/dataset
-    Will browse the list, and count every occurs of  female gender and male gender
+    Will browse the list, and count every occurs of female gender and male gender
+    Args:
+    data_list: List with data to be extracted
     """
     male = 0
     female = 0
@@ -130,12 +136,11 @@ input("Press Enter to continue...")
 def most_popular_gender(data_list):
     """
     Args
-    param1: list/array/dataset
+    data_list: List with data to be extracted
     Will Get the result of count_gender function and will find the bigger one
     """
     answer = ""
-    male = count_gender(data_list)[0]
-    female = count_gender(data_list)[1]
+    male, female = count_gender(data_list)
 
     if male > female:
         answer = "Male"
@@ -171,6 +176,11 @@ input("Press Enter to continue...")
 # TODO: Plot a similar graph for user_types. Make sure the legend is correct.
 print("\nTASK 7: Check the chart!")
 def count_user_types(data_list):
+    """
+    Plot a column graph with users type and quantity by type
+    Args:
+    data_list: List with data to be extracted
+    """
     subscriber = 0
     customer = 0
     for line in range(len(data_list)):
@@ -232,49 +242,51 @@ for duration in trip_duration_list:
 mean_trip /= len(trip_duration_list)
 
 #https://en.wikipedia.org/wiki/Quicksort
-def quickSort(A, lo, hi):
+def quickSort(data_set, start, end):
     """
-    Args:
-    param1: A list.
-    param2: start o list the index 0.
-    param3: end of list the len of index - 1
+    objective to sort a list. 
     Uses two indices that start at the ends of the array being partitioned,
     then move toward each other, until they detect an inversion.
-    """
-    if lo < hi:
-        p = partition(A, lo, hi)
-        quickSort(A, lo, p - 1)
-        quickSort(A, p + 1, hi)
-    return A
-def partition(A, lo, hi):
-    """
     Args:
-    param1: A list.
-    param2: start o list the index 0.
-    param3: end of list the len of index - 1
+    data_set: List with data to be ordered
+    start: start o list the index 0.
+    end: end of list the len of index - 1
+    """
+    if start < end:
+        split = partition(data_set, start, end)
+        quickSort(data_set, start, split - 1)
+        quickSort(data_set, split + 1, end)
+    return data_set
+
+def partition(data_set, start, end):
+    """
     A pair of elements, one greater than or equal to the pivot, 
     one lesser or equal, that are in the wrong order relative to each other. 
     The inverted elements are then swapped. 
     When the indices meet, the algorithm stops and returns the final index.
+    Args:
+    data_set: List with data to be ordered
+    start: start o list the index 0.
+    end: end of list the len of index - 1
     """
-    pivot = float(A[lo])
-    i = lo + 1
-    j = hi
+    pivot = float(data_set[start])
+    current_index = start + 1
+    next_index = end
 
     while True:
-        while i <= j and float(A[i]) <= pivot:
-            i = i + 1
+        while current_index <= next_index and float(data_set[current_index]) <= pivot:
+            current_index = current_index + 1
 
-        while float(A[j]) >= pivot and j >= i:
-            j = j -1
+        while float(data_set[next_index]) >= pivot and next_index >= current_index:
+            next_index = next_index -1
 
-        if j < i:
+        if next_index < current_index:
             break
         else:
-            A[i], A[j] = A[j], A[i]
+            data_set[current_index], data_set[next_index] = data_set[next_index], data_set[current_index]
 
-    A[lo], A[j] = A[j], A[lo]
-    return j
+    data_set[start], data_set[next_index] = data_set[next_index], data_set[start]
+    return next_index
 
 trip_duration_list = quickSort(trip_duration_list,0,len(trip_duration_list)-1)
 
@@ -329,6 +341,7 @@ input("Press Enter to continue...")
 # TODO: Create a function to count user types without hardcoding the types
 # so we can use this function with a different kind of data.
 print("Will you face it?")
+#I think I did not understand. Could you show me?
 answer = "no"
 
 def count_items(column_list):
